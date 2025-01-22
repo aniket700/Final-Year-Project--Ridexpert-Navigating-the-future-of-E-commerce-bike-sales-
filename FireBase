@@ -1,0 +1,57 @@
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js";
+import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-firestore.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-auth.js";
+
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+async function fetchBikes() {
+    const querySnapshot = await getDocs(collection(db, "bikes"));
+    querySnapshot.forEach((doc) => {
+        console.log(`${doc.id} =>`, doc.data());
+    });
+}
+
+async function addBike(name, price, description) {
+    try {
+        const docRef = await addDoc(collection(db, "bikes"), {
+            name,
+            price,
+            description,
+        });
+        console.log("Bike added with ID: ", docRef.id);
+    } catch (e) {
+        console.error("Error adding bike: ", e);
+    }
+}
+
+function signupUser(email, password) {
+    createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            console.log("User signed up: ", userCredential.user);
+        })
+        .catch((error) => {
+            console.error("Signup error: ", error.message);
+        });
+}
+
+function loginUser(email, password) {
+    signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            console.log("User logged in: ", userCredential.user);
+        })
+        .catch((error) => {
+            console.error("Login error: ", error.message);
+        });
+}
