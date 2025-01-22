@@ -1,0 +1,19 @@
+document.addEventListener("DOMContentLoaded", () => {
+    const bikes = [
+        { name: "Navigator 3000", price: "$1200", description: "Advanced GPS-enabled bike." },
+        { name: "Urban Explorer", price: "$900", description: "Perfect for city rides with maps." },
+        { name: "Trail Tracker", price: "$1500", description: "Best for adventurous trails." },
+    ];
+
+    const bikeList = document.getElementById("bike-list");
+    bikes.forEach((bike) => {
+        const bikeCard = document.createElement("div");
+        bikeCard.innerHTML = `
+            <h3>${bike.name}</h3>
+            <p>${bike.description}</p>
+            <p><strong>${bike.price}</strong></p>
+            <button>Buy Now</button>
+        `;
+        bikeList.appendChild(bikeCard);
+    });
+});
